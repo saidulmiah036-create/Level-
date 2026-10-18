@@ -19,8 +19,8 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 # ═══════════════════════════════════════════════════════════════
 #  OWNER CREDENTIALS (hardcoded)
 # ═══════════════════════════════════════════════════════════════
-ADMIN_USER = "ShadowGMRFF"
-ADMIN_PASS = "ShadowGMRFF"
+ADMIN_USER = "saidul"
+ADMIN_PASS = "7985"
 
 # In-memory sessions (24h TTL)
 _SESSIONS: Dict[str, Dict[str, Any]] = {}
