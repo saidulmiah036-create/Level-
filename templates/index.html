@@ -1,0 +1,2427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#07090f">
+<title>ShadowGMRFF — Command Center</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   SHADOWGMRFF — PREMIUM THEME
+   Palette: Midnight Navy + Neon Teal + Warm Gold
+   ═══════════════════════════════════════════════════════════════ */
+:root{
+    /* Base */
+    --bg-0:#07090f;
+    --bg-1:#0b0f19;
+    --bg-2:#101724;
+    --bg-3:#161f30;
+    --bg-4:#1c2841;
+
+    /* Borders */
+    --line-1:rgba(120,180,220,.08);
+    --line-2:rgba(120,180,220,.14);
+    --line-3:rgba(120,180,220,.22);
+
+    /* Accent — Neon Teal */
+    --teal:#2dd4bf;
+    --teal-hi:#5eead4;
+    --teal-dim:rgba(45,212,191,.12);
+    --teal-line:rgba(45,212,191,.35);
+
+    /* Accent — Warm Gold */
+    --gold:#fbbf24;
+    --gold-hi:#fcd34d;
+    --gold-dim:rgba(251,191,36,.12);
+    --gold-line:rgba(251,191,36,.35);
+
+    /* Accent — Rose (danger) */
+    --rose:#fb7185;
+    --rose-hi:#fda4af;
+    --rose-dim:rgba(251,113,133,.12);
+    --rose-line:rgba(251,113,133,.35);
+
+    /* Accent — Sky (info) */
+    --sky:#38bdf8;
+    --sky-hi:#7dd3fc;
+    --sky-dim:rgba(56,189,248,.12);
+    --sky-line:rgba(56,189,248,.35);
+
+    /* Text */
+    --fg-0:#f8fafc;
+    --fg-1:#cbd5e1;
+    --fg-2:#94a3b8;
+    --fg-3:#64748b;
+    --fg-4:#475569;
+
+    /* Radius */
+    --r-xs:6px;
+    --r-sm:10px;
+    --r-md:14px;
+    --r-lg:20px;
+    --r-xl:26px;
+    --r-full:9999px;
+
+    /* Shadows */
+    --shadow-sm:0 2px 8px rgba(0,0,0,.4);
+    --shadow-md:0 8px 24px rgba(0,0,0,.5);
+    --shadow-lg:0 20px 48px rgba(0,0,0,.6);
+    --shadow-glow-teal:0 0 24px rgba(45,212,191,.25);
+    --shadow-glow-gold:0 0 24px rgba(251,191,36,.25);
+}
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overflow-x:hidden;}
+body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:var(--bg-0);
+    color:var(--fg-0);
+    min-height:100vh;
+    overscroll-behavior-y:none;
+    -webkit-font-smoothing:antialiased;
+    line-height:1.5;
+    font-feature-settings:'cv11','ss01';
+}
+
+/* ─── Ambient background ─── */
+.bg-stage{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+.bg-orbe{
+    position:absolute;border-radius:50%;filter:blur(120px);opacity:.28;
+    animation:orbeFloat 24s ease-in-out infinite;
+}
+.bg-orbe.o1{width:560px;height:560px;background:radial-gradient(circle,#2dd4bf,transparent 70%);top:-220px;left:-200px;}
+.bg-orbe.o2{width:480px;height:480px;background:radial-gradient(circle,#fbbf24,transparent 70%);bottom:-200px;right:-160px;animation-delay:-8s;opacity:.2;}
+.bg-orbe.o3{width:380px;height:380px;background:radial-gradient(circle,#38bdf8,transparent 70%);top:50%;left:48%;animation-delay:-16s;opacity:.15;}
+@keyframes orbeFloat{
+    0%,100%{transform:translate(0,0) scale(1);}
+    33%{transform:translate(70px,-60px) scale(1.12);}
+    66%{transform:translate(-60px,60px) scale(.92);}
+}
+.bg-noise{
+    position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35;
+    background-image:
+        linear-gradient(rgba(120,180,220,.025) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(120,180,220,.025) 1px,transparent 1px);
+    background-size:48px 48px;
+    mask-image:radial-gradient(ellipse 80% 80% at center,#000 20%,transparent 90%);
+    -webkit-mask-image:radial-gradient(ellipse 80% 80% at center,#000 20%,transparent 90%);
+}
+
+/* ═══════ LOGIN ═══════ */
+#login-screen{
+    position:fixed;inset:0;z-index:9999;
+    display:flex;align-items:center;justify-content:center;
+    padding:16px;background:var(--bg-0);overflow-y:auto;
+}
+#login-screen::before{
+    content:"";position:absolute;inset:0;
+    background:
+        radial-gradient(ellipse 60% 50% at 25% 25%,rgba(45,212,191,.14),transparent 55%),
+        radial-gradient(ellipse 50% 45% at 75% 75%,rgba(251,191,36,.10),transparent 55%);
+    pointer-events:none;
+}
+.login-shell{
+    position:relative;z-index:1;
+    width:100%;max-width:420px;
+    padding:44px 34px 34px;border-radius:32px;
+    background:linear-gradient(155deg,rgba(22,31,48,.92),rgba(11,15,25,.96));
+    backdrop-filter:blur(24px);
+    border:1px solid var(--line-2);
+    box-shadow:var(--shadow-lg),inset 0 1px 0 rgba(255,255,255,.04);
+    animation:shellIn .55s cubic-bezier(.16,1,.3,1);
+}
+@keyframes shellIn{from{opacity:0;transform:translateY(28px) scale(.96);}to{opacity:1;transform:none;}}
+
+.login-mark{
+    width:84px;height:84px;margin:0 auto 22px;position:relative;
+}
+.login-mark-glow{
+    position:absolute;inset:-10px;border-radius:26px;
+    background:radial-gradient(circle,rgba(45,212,191,.6),transparent 70%);
+    filter:blur(18px);animation:markGlow 3s ease-in-out infinite;
+}
+@keyframes markGlow{0%,100%{opacity:.6;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+.login-mark-tile{
+    position:absolute;inset:0;border-radius:24px;
+    background:linear-gradient(135deg,#2dd4bf 0%,#14b8a6 45%,#0d9488 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:38px;color:#07090f;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.3),inset 0 -2px 0 rgba(0,0,0,.15);
+    animation:markBreathe 4s ease-in-out infinite;
+}
+@keyframes markBreathe{0%,100%{transform:scale(1);}50%{transform:scale(1.03);}}
+
+.login-title{
+    text-align:center;
+    font-family:'Sora',sans-serif;
+    font-size:28px;font-weight:800;letter-spacing:-.8px;
+    background:linear-gradient(135deg,#f8fafc 0%,#5eead4 55%,#2dd4bf 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    margin-bottom:6px;
+}
+.login-sub{
+    text-align:center;font-size:11px;font-weight:600;
+    color:var(--fg-3);letter-spacing:2px;margin-bottom:16px;
+    text-transform:uppercase;
+}
+.login-chip{display:flex;justify-content:center;margin-bottom:26px;}
+.login-chip span{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:6px 14px;border-radius:100px;
+    background:var(--teal-dim);border:1px solid var(--teal-line);
+    color:var(--teal-hi);font-size:10px;font-weight:700;
+    letter-spacing:2px;text-transform:uppercase;
+}
+.pulse-dot{
+    width:6px;height:6px;border-radius:50%;
+    background:var(--teal);box-shadow:0 0 12px var(--teal);
+    animation:pulseDot 1.5s ease-in-out infinite;
+}
+@keyframes pulseDot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+
+.field{position:relative;margin-bottom:12px;}
+.field .f-icon{
+    position:absolute;left:18px;top:50%;transform:translateY(-50%);
+    color:var(--fg-3);font-size:14px;pointer-events:none;transition:.25s;z-index:1;
+}
+.field:focus-within .f-icon{color:var(--teal-hi);}
+.field input{
+    width:100%;padding:15px 46px;border-radius:13px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.7);
+    color:var(--fg-0);font-family:'Fira Code',monospace;
+    font-size:13px;letter-spacing:.5px;outline:none;
+    transition:.25s;-webkit-appearance:none;
+}
+.field input:focus{
+    border-color:var(--teal);background:rgba(45,212,191,.05);
+    box-shadow:0 0 0 4px rgba(45,212,191,.10);
+}
+.field input::placeholder{color:var(--fg-4);font-size:11px;letter-spacing:1.5px;font-family:'Inter',sans-serif;font-weight:500;}
+.eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:0;color:var(--fg-3);cursor:pointer;padding:8px;font-size:13px;transition:.2s;z-index:2;}
+.eye:hover{color:var(--teal-hi);}
+
+.login-cta{
+    width:100%;margin-top:8px;padding:16px;
+    border:0;border-radius:13px;cursor:pointer;
+    font-family:'Sora',sans-serif;font-size:13px;font-weight:700;
+    letter-spacing:1.2px;text-transform:uppercase;color:#07090f;
+    background:linear-gradient(135deg,#5eead4 0%,#2dd4bf 50%,#14b8a6 100%);
+    box-shadow:0 12px 32px rgba(45,212,191,.32);
+    transition:.3s;position:relative;overflow:hidden;
+}
+.login-cta::before{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(135deg,transparent,rgba(255,255,255,.35),transparent);
+    transform:translateX(-100%);transition:.7s;
+}
+.login-cta:hover:not(:disabled)::before{transform:translateX(100%);}
+.login-cta:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 16px 42px rgba(45,212,191,.5);}
+.login-cta:disabled{opacity:.6;cursor:wait;}
+.login-error{min-height:16px;text-align:center;margin-top:8px;color:var(--rose);font-size:12px;font-weight:600;letter-spacing:.3px;}
+.login-meta{
+    margin-top:24px;padding-top:20px;border-top:1px solid var(--line-1);
+    text-align:center;color:var(--fg-4);font-size:9px;
+    letter-spacing:1.5px;text-transform:uppercase;line-height:2;
+}
+.login-meta b{color:var(--teal-hi);font-weight:700;}
+
+/* ═══════ APP ═══════ */
+#app{display:none;position:relative;z-index:1;}
+.app-header{
+    position:sticky;top:0;z-index:100;
+    background:rgba(7,9,15,.82);
+    backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-bottom:1px solid var(--line-1);
+}
+.header-shell{
+    max-width:1480px;margin:0 auto;padding:12px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0;}
+.brand-tile{
+    width:44px;height:44px;border-radius:13px;
+    background:linear-gradient(135deg,#2dd4bf 0%,#14b8a6 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-size:19px;color:#07090f;
+    box-shadow:0 0 22px rgba(45,212,191,.35),inset 0 1px 0 rgba(255,255,255,.3);
+    flex-shrink:0;
+}
+.brand-txt{min-width:0;}
+.brand-name{
+    font-family:'Sora',sans-serif;font-size:16px;font-weight:800;
+    letter-spacing:-.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    background:linear-gradient(90deg,#f8fafc 0%,#5eead4 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.brand-tag{
+    display:flex;align-items:center;gap:6px;font-size:9px;font-weight:700;
+    color:var(--fg-3);letter-spacing:1.4px;text-transform:uppercase;margin-top:2px;
+    white-space:nowrap;overflow:hidden;
+}
+.live-dot{display:inline-flex;align-items:center;gap:5px;color:var(--teal-hi);}
+.live-dot::before{
+    content:"";width:5px;height:5px;border-radius:50%;
+    background:var(--teal);box-shadow:0 0 10px var(--teal);
+    animation:pulseDot 1.5s ease-in-out infinite;
+}
+
+.hdr-nav{display:flex;gap:4px;flex-shrink:0;}
+.hdr-btn{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 12px;border-radius:11px;
+    background:transparent;border:1px solid transparent;
+    color:var(--fg-3);font-size:11px;font-weight:600;
+    font-family:'Inter',sans-serif;letter-spacing:.3px;
+    cursor:pointer;transition:.2s;white-space:nowrap;-webkit-appearance:none;
+}
+.hdr-btn:hover{
+    background:var(--teal-dim);color:var(--fg-0);
+    border-color:var(--teal-line);
+}
+.hdr-btn.danger:hover{
+    color:var(--rose);border-color:var(--rose-line);
+    background:var(--rose-dim);
+}
+
+/* ═══════ LAYOUT ═══════ */
+.wrap{max-width:1480px;margin:0 auto;padding:18px;padding-bottom:100px;}
+
+/* ═══════ HERO ═══════ */
+.hero{
+    padding:26px 30px;border-radius:var(--r-xl);
+    background:
+        linear-gradient(135deg,rgba(45,212,191,.08) 0%,rgba(251,191,36,.04) 100%),
+        linear-gradient(155deg,rgba(22,31,48,.9),rgba(11,15,25,.95));
+    border:1px solid var(--line-2);
+    margin-bottom:18px;position:relative;overflow:hidden;
+}
+.hero::before{
+    content:"";position:absolute;top:-60%;right:-8%;
+    width:380px;height:380px;
+    background:radial-gradient(circle,rgba(251,191,36,.18),transparent 70%);
+    border-radius:50%;filter:blur(70px);pointer-events:none;
+}
+.hero::after{
+    content:"";position:absolute;bottom:-60%;left:-8%;
+    width:340px;height:340px;
+    background:radial-gradient(circle,rgba(45,212,191,.15),transparent 70%);
+    border-radius:50%;filter:blur(70px);pointer-events:none;
+}
+.hero-in{position:relative;z-index:1;}
+.hero-t{
+    font-family:'Sora',sans-serif;
+    font-size:27px;font-weight:800;letter-spacing:-1px;
+    margin-bottom:8px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.hero-t em{
+    font-style:normal;
+    background:linear-gradient(135deg,#5eead4,#2dd4bf);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-pill{
+    font-size:10px;font-weight:700;padding:5px 11px;border-radius:100px;
+    background:var(--teal-dim);border:1px solid var(--teal-line);
+    color:var(--teal-hi);letter-spacing:1.4px;text-transform:uppercase;
+    display:inline-flex;align-items:center;gap:5px;
+}
+.hero-d{color:var(--fg-1);font-size:13.5px;max-width:640px;line-height:1.65;}
+
+/* ═══════ CONTROL PANEL ═══════ */
+.ctrl-grid{
+    display:grid;
+    grid-template-columns:1.2fr 1fr 1.3fr;
+    gap:14px;margin-bottom:18px;
+}
+.ctrl{
+    padding:18px 20px;border-radius:var(--r-lg);
+    background:linear-gradient(155deg,rgba(22,31,48,.9),rgba(11,15,25,.95));
+    border:1.5px solid var(--line-1);
+    transition:.3s;position:relative;overflow:hidden;
+}
+.ctrl:hover{border-color:var(--line-3);transform:translateY(-2px);}
+.ctrl-h{
+    display:flex;align-items:center;gap:9px;margin-bottom:14px;
+}
+.ctrl-h i{
+    width:30px;height:30px;border-radius:9px;
+    background:var(--teal-dim);border:1px solid var(--teal-line);
+    color:var(--teal-hi);display:flex;align-items:center;
+    justify-content:center;font-size:12px;flex-shrink:0;
+}
+.ctrl-h span{
+    font-family:'Sora',sans-serif;
+    font-size:11.5px;font-weight:700;letter-spacing:1px;
+    color:var(--fg-1);text-transform:uppercase;
+}
+
+/* Mode buttons */
+.mode-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.mode-btn{
+    padding:12px 6px;border-radius:12px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.6);
+    color:var(--fg-2);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    transition:.25s;font-family:'Inter',sans-serif;-webkit-appearance:none;
+}
+.mode-btn i{font-size:15px;color:var(--fg-3);transition:.25s;}
+.mode-btn span{font-size:11px;font-weight:700;letter-spacing:.3px;}
+.mode-btn:hover{border-color:var(--line-3);background:rgba(45,212,191,.06);transform:translateY(-2px);}
+.mode-btn[data-mode="BR"].active{
+    border-color:var(--gold);background:var(--gold-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(251,191,36,.22);
+}
+.mode-btn[data-mode="BR"].active i{color:var(--gold-hi);}
+.mode-btn[data-mode="LW"].active{
+    border-color:var(--teal);background:var(--teal-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(45,212,191,.22);
+}
+.mode-btn[data-mode="LW"].active i{color:var(--teal-hi);}
+.mode-btn[data-mode="AUTO"].active{
+    border-color:var(--sky);background:var(--sky-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(56,189,248,.22);
+}
+.mode-btn[data-mode="AUTO"].active i{color:var(--sky-hi);}
+
+/* Risk buttons */
+.risk-wrap{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.risk-btn{
+    padding:14px 8px;border-radius:12px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.6);
+    color:var(--fg-2);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:4px;
+    transition:.25s;font-family:'Inter',sans-serif;-webkit-appearance:none;
+}
+.risk-btn i{font-size:19px;color:var(--fg-3);transition:.25s;}
+.risk-btn span{font-size:11.5px;font-weight:700;letter-spacing:.4px;}
+.risk-btn small{font-size:9px;color:var(--fg-4);letter-spacing:.4px;font-weight:500;}
+.risk-btn:hover{transform:translateY(-2px);}
+.risk-btn[data-mode="SAFE"]:hover{border-color:var(--teal-line);background:var(--teal-dim);}
+.risk-btn[data-mode="SAFE"].active{
+    border-color:var(--teal);background:var(--teal-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(45,212,191,.25);
+}
+.risk-btn[data-mode="SAFE"].active i{color:var(--teal-hi);}
+.risk-btn[data-mode="RISK"]:hover{border-color:var(--rose-line);background:var(--rose-dim);}
+.risk-btn[data-mode="RISK"].active{
+    border-color:var(--rose);background:var(--rose-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(251,113,133,.25);
+}
+.risk-btn[data-mode="RISK"].active i{color:var(--rose-hi);animation:riskBeat 1.3s ease-in-out infinite;}
+@keyframes riskBeat{0%,100%{transform:scale(1);}50%{transform:scale(1.15);}}
+
+/* Speed */
+.spd-control{padding-top:2px;}
+.spd-slider{
+    width:100%;height:8px;border-radius:100px;
+    background:linear-gradient(90deg,rgba(45,212,191,.5) 0%,rgba(56,189,248,.5) 40%,rgba(251,191,36,.5) 70%,rgba(251,113,133,.5) 100%);
+    outline:none;-webkit-appearance:none;cursor:pointer;margin-bottom:12px;
+}
+.spd-slider::-webkit-slider-thumb{
+    -webkit-appearance:none;appearance:none;
+    width:24px;height:24px;border-radius:50%;
+    background:linear-gradient(135deg,#5eead4,#2dd4bf);
+    border:3px solid #07090f;
+    box-shadow:0 0 20px rgba(45,212,191,.7),0 4px 12px rgba(0,0,0,.4);
+    cursor:pointer;transition:.2s;
+}
+.spd-slider::-webkit-slider-thumb:hover{transform:scale(1.15);}
+.spd-slider::-moz-range-thumb{
+    width:24px;height:24px;border-radius:50%;
+    background:linear-gradient(135deg,#5eead4,#2dd4bf);
+    border:3px solid #07090f;
+    box-shadow:0 0 20px rgba(45,212,191,.7);cursor:pointer;
+}
+.spd-row{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.spd-val{
+    font-family:'Sora',sans-serif;
+    font-size:28px;font-weight:800;letter-spacing:-1px;
+    background:linear-gradient(135deg,#5eead4,#2dd4bf);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    line-height:1;
+}
+.spd-preset{display:flex;gap:5px;}
+.spd-p{
+    padding:6px 9px;border-radius:8px;
+    border:1px solid var(--line-1);
+    background:rgba(45,212,191,.04);
+    color:var(--fg-3);font-size:10px;font-weight:700;
+    cursor:pointer;transition:.2s;font-family:'Fira Code',monospace;
+    -webkit-appearance:none;
+}
+.spd-p:hover,.spd-p.active{
+    color:var(--teal-hi);border-color:var(--teal-line);
+    background:var(--teal-dim);
+}
+.spd-hint{
+    margin-top:9px;font-size:10px;color:var(--fg-4);
+    display:flex;align-items:center;gap:6px;font-weight:500;
+}
+.spd-hint b{color:var(--teal-hi);}
+
+/* ═══════ STATS ═══════ */
+.stats-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px;}
+.stat{
+    padding:16px 18px;border-radius:var(--r-lg);
+    background:linear-gradient(155deg,rgba(22,31,48,.9),rgba(11,15,25,.95));
+    border:1px solid var(--line-1);
+    transition:.3s;position:relative;overflow:hidden;
+}
+.stat::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,var(--teal),var(--gold));opacity:.7;
+}
+.stat[data-color="teal"]::before{background:linear-gradient(90deg,#2dd4bf,#5eead4);}
+.stat[data-color="gold"]::before{background:linear-gradient(90deg,#fbbf24,#fcd34d);}
+.stat[data-color="sky"]::before{background:linear-gradient(90deg,#38bdf8,#7dd3fc);}
+.stat[data-color="rose"]::before{background:linear-gradient(90deg,#fb7185,#fda4af);}
+.stat:hover{
+    transform:translateY(-2px);border-color:var(--line-3);
+    box-shadow:var(--shadow-md);
+}
+.stat-i{
+    width:38px;height:38px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:15px;
+    background:var(--teal-dim);color:var(--teal-hi);
+    border:1px solid var(--teal-line);margin-bottom:10px;
+}
+.stat[data-color="teal"] .stat-i{background:var(--teal-dim);color:var(--teal-hi);border-color:var(--teal-line);}
+.stat[data-color="gold"] .stat-i{background:var(--gold-dim);color:var(--gold-hi);border-color:var(--gold-line);}
+.stat[data-color="sky"] .stat-i{background:var(--sky-dim);color:var(--sky-hi);border-color:var(--sky-line);}
+.stat[data-color="rose"] .stat-i{background:var(--rose-dim);color:var(--rose-hi);border-color:var(--rose-line);}
+.stat-l{
+    display:block;font-size:9px;font-weight:700;
+    letter-spacing:1.4px;text-transform:uppercase;
+    color:var(--fg-3);margin-bottom:5px;
+}
+.stat-v{
+    font-family:'Sora',sans-serif;font-size:22px;font-weight:800;
+    letter-spacing:-.5px;color:var(--fg-0);line-height:1.1;margin-bottom:5px;
+}
+.stat-s{font-size:10px;color:var(--fg-4);font-weight:500;}
+
+/* ═══════ MAIN GRID ═══════ */
+.main-grid{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:18px;}
+
+.panel{
+    background:linear-gradient(155deg,rgba(22,31,48,.85),rgba(11,15,25,.95));
+    border:1px solid var(--line-1);
+    border-radius:var(--r-xl);overflow:hidden;
+    box-shadow:var(--shadow-md);
+}
+.panel-h{
+    padding:16px 20px;border-bottom:1px solid var(--line-1);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+}
+.panel-hl{display:flex;align-items:center;gap:10px;min-width:0;}
+.panel-i{
+    width:36px;height:36px;border-radius:10px;
+    background:var(--teal-dim);border:1px solid var(--teal-line);
+    color:var(--teal-hi);display:flex;align-items:center;
+    justify-content:center;font-size:14px;flex-shrink:0;
+}
+.panel-t{
+    font-family:'Sora',sans-serif;font-size:15px;font-weight:700;
+    display:flex;align-items:center;gap:8px;letter-spacing:-.2px;
+    white-space:nowrap;overflow:hidden;
+}
+.panel-badge{
+    font-family:'Fira Code',monospace;font-size:10px;
+    padding:3px 8px;border-radius:7px;
+    background:var(--teal-dim);border:1px solid var(--teal-line);
+    color:var(--teal-hi);font-weight:700;
+}
+
+/* Buttons */
+.btn{
+    padding:9px 15px;border-radius:10px;
+    border:1.5px solid var(--line-1);
+    background:rgba(45,212,191,.04);
+    color:var(--fg-0);font-family:'Inter',sans-serif;
+    font-size:11px;font-weight:600;letter-spacing:.3px;
+    cursor:pointer;transition:.25s;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    white-space:nowrap;-webkit-appearance:none;
+}
+.btn:hover{
+    border-color:var(--teal-line);
+    background:var(--teal-dim);transform:translateY(-1px);
+}
+.btn-main{
+    border:0;background:linear-gradient(135deg,#5eead4 0%,#2dd4bf 50%,#14b8a6 100%);
+    color:#07090f;box-shadow:0 8px 24px rgba(45,212,191,.3);font-weight:700;
+}
+.btn-main:hover{box-shadow:0 12px 32px rgba(45,212,191,.45);transform:translateY(-2px);}
+
+.toolbar{
+    padding:14px 20px;display:flex;gap:10px;align-items:center;
+    border-bottom:1px solid var(--line-1);flex-wrap:wrap;
+}
+.search{flex:1;min-width:180px;position:relative;}
+.search .s-i{
+    position:absolute;left:14px;top:50%;transform:translateY(-50%);
+    color:var(--fg-4);font-size:12px;pointer-events:none;
+}
+.search input{
+    width:100%;padding:11px 14px 11px 38px;border-radius:11px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.6);
+    color:var(--fg-0);font-size:12px;font-family:'Inter',sans-serif;
+    outline:none;transition:.25s;-webkit-appearance:none;
+}
+.search input:focus{border-color:var(--teal);background:rgba(45,212,191,.06);}
+.search input::placeholder{color:var(--fg-4);}
+
+.filters{
+    display:flex;gap:3px;padding:3px;border-radius:11px;
+    background:rgba(7,9,15,.6);border:1.5px solid var(--line-1);
+}
+.f-btn{
+    padding:7px 13px;border-radius:8px;border:0;
+    background:transparent;color:var(--fg-3);
+    font-family:'Inter',sans-serif;font-size:10px;font-weight:600;
+    letter-spacing:.5px;cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.f-btn:hover{color:var(--fg-0);}
+.f-btn.active{color:var(--teal-hi);background:var(--teal-dim);}
+
+/* ═══════ ACCOUNT LIST ═══════ */
+.acc-list{
+    padding:14px 18px;
+    max-height:calc(100vh - 640px);
+    min-height:380px;
+    overflow-y:auto;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(45,212,191,.25) transparent;
+    -webkit-overflow-scrolling:touch;
+}
+.acc-list::-webkit-scrollbar,
+.log-stream::-webkit-scrollbar{width:5px;}
+.acc-list::-webkit-scrollbar-thumb,
+.log-stream::-webkit-scrollbar-thumb{
+    background:rgba(45,212,191,.25);border-radius:10px;
+}
+.acc-list::-webkit-scrollbar-track,
+.log-stream::-webkit-scrollbar-track{background:transparent;}
+
+/* Account card */
+.acc{
+    position:relative;padding:16px 18px;margin-bottom:12px;
+    border-radius:var(--r-md);
+    background:linear-gradient(140deg,rgba(28,40,65,.6),rgba(11,15,25,.85));
+    border:1.5px solid var(--line-1);
+    transition:.3s;overflow:hidden;
+}
+.acc::before{
+    content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+    background:linear-gradient(180deg,#2dd4bf,#14b8a6);
+}
+.acc[data-mode="BR"]::before{background:linear-gradient(180deg,#fbbf24,#f59e0b);}
+.acc[data-mode="LW"]::before{background:linear-gradient(180deg,#2dd4bf,#14b8a6);}
+.acc:hover{
+    border-color:var(--line-3);transform:translateY(-2px);
+    box-shadow:var(--shadow-md);
+}
+.acc-top{
+    display:flex;align-items:flex-start;justify-content:space-between;
+    gap:12px;margin-bottom:12px;
+}
+.acc-id{display:flex;align-items:center;gap:12px;min-width:0;flex:1;}
+.acc-av-wrap{position:relative;flex-shrink:0;}
+.acc-av{
+    width:50px;height:50px;border-radius:14px;
+    background:linear-gradient(140deg,rgba(45,212,191,.18),rgba(251,191,36,.1));
+    border:1px solid var(--teal-line);
+    display:flex;align-items:center;justify-content:center;
+    font-size:20px;color:var(--teal-hi);
+}
+.acc-lvl{
+    position:absolute;right:-6px;bottom:-6px;
+    padding:3px 9px;border-radius:8px;
+    background:linear-gradient(135deg,#5eead4,#2dd4bf);
+    color:#07090f;font-family:'Fira Code',monospace;
+    font-size:10px;font-weight:700;border:2px solid #07090f;
+    box-shadow:0 4px 12px rgba(45,212,191,.4);line-height:1.3;
+}
+.acc-info{min-width:0;flex:1;}
+.acc-nm{
+    font-family:'Sora',sans-serif;font-size:14px;font-weight:700;
+    letter-spacing:-.2px;display:flex;align-items:center;gap:6px;
+    flex-wrap:wrap;margin-bottom:5px;
+}
+.acc-nm-txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:180px;}
+.tag{
+    padding:2px 8px;border-radius:6px;font-size:8.5px;font-weight:800;
+    letter-spacing:.8px;text-transform:uppercase;white-space:nowrap;
+}
+.tag-region{
+    color:var(--sky-hi);background:var(--sky-dim);
+    border:1px solid var(--sky-line);
+}
+.tag-br{color:var(--gold-hi);background:var(--gold-dim);border:1px solid var(--gold-line);}
+.tag-lw{color:var(--teal-hi);background:var(--teal-dim);border:1px solid var(--teal-line);}
+.tag-auto{color:var(--sky-hi);background:var(--sky-dim);border:1px solid var(--sky-line);}
+.tag-spd{
+    color:var(--gold-hi);background:var(--gold-dim);
+    border:1px solid var(--gold-line);
+    font-family:'Fira Code',monospace;
+}
+.acc-meta{
+    display:flex;align-items:center;gap:8px;
+    font-family:'Fira Code',monospace;
+    font-size:10.5px;color:var(--fg-3);flex-wrap:wrap;
+}
+.acc-meta .uptime{display:inline-flex;align-items:center;gap:4px;color:var(--teal-hi);}
+
+/* Status pill */
+.status{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:6px 11px;border-radius:100px;
+    font-size:9px;font-weight:800;letter-spacing:1px;
+    text-transform:uppercase;border:1px solid;flex-shrink:0;white-space:nowrap;
+}
+.status .s-dot{
+    width:5px;height:5px;border-radius:50%;
+    background:currentColor;box-shadow:0 0 10px currentColor;
+    animation:pulseDot 1.5s ease-in-out infinite;
+}
+.s-online{color:var(--teal-hi);background:var(--teal-dim);border-color:var(--teal-line);}
+.s-match{color:var(--sky-hi);background:var(--sky-dim);border-color:var(--sky-line);}
+.s-search{color:var(--gold-hi);background:var(--gold-dim);border-color:var(--gold-line);}
+.s-paused{color:var(--gold-hi);background:var(--gold-dim);border-color:var(--gold-line);}
+.s-error{color:var(--rose-hi);background:var(--rose-dim);border-color:var(--rose-line);}
+
+/* Metrics */
+.acc-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.metric{
+    padding:10px;border-radius:10px;
+    background:rgba(7,9,15,.6);border:1px solid var(--line-1);
+}
+.metric .m-l{
+    display:block;font-size:8.5px;font-weight:700;
+    letter-spacing:1.3px;text-transform:uppercase;
+    color:var(--fg-4);margin-bottom:4px;
+}
+.metric .m-v{
+    display:block;font-family:'Fira Code',monospace;
+    font-size:12px;font-weight:600;color:var(--fg-0);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.metric.gain .m-v{color:var(--teal-hi);text-shadow:0 0 12px rgba(45,212,191,.5);}
+
+/* Progress */
+.prog-box{
+    padding:12px;border-radius:11px;
+    background:rgba(7,9,15,.5);border:1px solid var(--line-1);
+    margin-bottom:12px;
+}
+.prog-h{
+    display:flex;justify-content:space-between;align-items:center;
+    gap:8px;margin-bottom:8px;font-size:10.5px;color:var(--fg-1);
+}
+.prog-h b{color:var(--teal-hi);font-family:'Fira Code',monospace;font-weight:700;}
+.prog-bar{height:8px;border-radius:100px;background:rgba(7,9,15,.9);overflow:hidden;position:relative;}
+.prog-in{
+    height:100%;border-radius:100px;
+    background:linear-gradient(90deg,#2dd4bf,#5eead4,#fbbf24);
+    background-size:200% 100%;animation:progShift 4s linear infinite;
+    box-shadow:0 0 16px rgba(45,212,191,.5);
+    transition:width .8s cubic-bezier(.16,1,.3,1);
+}
+@keyframes progShift{to{background-position:200% 0;}}
+.prog-f{
+    display:flex;justify-content:space-between;align-items:center;
+    margin-top:6px;font-family:'Fira Code',monospace;
+    font-size:9.5px;color:var(--fg-4);
+}
+.prog-f .pct{color:var(--teal-hi);font-weight:700;font-size:11px;}
+
+/* Selectors */
+.acc-sel{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.sel-g{display:flex;flex-direction:column;gap:5px;}
+.sel-g label{
+    font-size:8.5px;font-weight:700;letter-spacing:1.2px;
+    text-transform:uppercase;color:var(--fg-4);
+}
+.sel-in{
+    padding:8px 10px;border-radius:9px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.7);
+    color:var(--fg-0);font-family:'Inter',sans-serif;
+    font-size:11px;font-weight:600;outline:none;
+    transition:.2s;cursor:pointer;-webkit-appearance:none;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2.5'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;background-position:right 10px center;padding-right:28px;
+}
+.sel-in:focus{border-color:var(--teal);background:rgba(45,212,191,.08);}
+.sel-in option{background:#161f30;color:#fff;}
+
+/* Footer */
+.acc-foot{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:8px;padding-top:10px;
+    border-top:1px solid var(--line-1);flex-wrap:wrap;
+}
+.acc-last{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:9.5px;color:var(--fg-4);font-family:'Fira Code',monospace;
+}
+.acc-acts{display:flex;gap:5px;flex-wrap:wrap;}
+.i-btn{
+    width:34px;height:34px;border-radius:9px;
+    border:1.5px solid var(--line-1);
+    background:rgba(45,212,191,.04);
+    color:var(--fg-3);cursor:pointer;
+    font-size:12px;transition:.25s;
+    display:flex;align-items:center;justify-content:center;
+    -webkit-appearance:none;
+}
+.i-btn:hover{
+    color:var(--teal-hi);border-color:var(--teal-line);
+    background:var(--teal-dim);transform:translateY(-2px);
+}
+.i-btn.danger:hover{color:var(--rose-hi);border-color:var(--rose-line);background:var(--rose-dim);}
+.i-btn.live:hover{color:var(--teal-hi);border-color:var(--teal-line);background:var(--teal-dim);}
+
+/* ═══════ CONSOLE ═══════ */
+.console-panel{
+    display:flex;flex-direction:column;
+    height:calc(100vh - 220px);
+    min-height:480px;
+    max-height:calc(100vh - 180px);
+}
+.console-toolbar{
+    padding:10px 18px;display:flex;justify-content:space-between;
+    align-items:center;gap:10px;border-bottom:1px solid var(--line-1);
+    flex-wrap:wrap;
+}
+.cf-group{display:flex;gap:3px;flex-wrap:wrap;min-width:0;}
+.cf{
+    padding:6px 11px;border-radius:8px;
+    border:1.5px solid var(--line-1);
+    background:transparent;color:var(--fg-3);
+    cursor:pointer;font-size:9.5px;font-weight:700;
+    letter-spacing:.8px;transition:.25s;white-space:nowrap;
+    font-family:'Inter',sans-serif;
+}
+.cf:hover{color:var(--fg-0);border-color:var(--line-3);}
+.cf.active{
+    color:var(--teal-hi);background:var(--teal-dim);
+    border-color:var(--teal-line);
+}
+.log-stream{
+    flex:1;margin:12px;padding:14px;border-radius:12px;
+    background:#050810;border:1px solid var(--line-1);
+    overflow-y:auto;font-family:'Fira Code',monospace;
+    font-size:10.5px;line-height:1.8;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(45,212,191,.3) transparent;
+}
+.log-line{display:flex;gap:8px;margin-bottom:4px;word-break:break-word;}
+.log-t{color:#334155;flex-shrink:0;font-weight:600;}
+.log-m{color:#cbd5e1;}
+.log-m.success{color:var(--teal-hi);}
+.log-m.warning{color:var(--gold-hi);}
+.log-m.error{color:var(--rose-hi);}
+.log-m.info{color:var(--sky-hi);}
+.console-foot{
+    padding:10px 18px;border-top:1px solid var(--line-1);
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:9px;color:var(--fg-4);font-weight:600;
+    letter-spacing:1.2px;text-transform:uppercase;flex-wrap:wrap;gap:6px;
+}
+.console-foot .live-tag{display:inline-flex;align-items:center;gap:6px;color:var(--teal-hi);}
+
+/* Empty */
+.empty{
+    text-align:center;padding:60px 20px;color:var(--fg-2);
+}
+.empty i{
+    font-size:48px;
+    background:linear-gradient(135deg,#5eead4,#2dd4bf);
+    -webkit-background-clip:text;background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:16px;display:block;opacity:.5;
+}
+.empty p{font-size:13px;margin-bottom:18px;letter-spacing:.3px;}
+
+/* ═══════ MODAL ═══════ */
+.modal-mask{
+    position:fixed;inset:0;z-index:5000;
+    display:none;align-items:center;justify-content:center;
+    padding:16px;background:rgba(7,9,15,.88);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    overflow-y:auto;
+}
+.modal-mask.active{display:flex;}
+.modal{
+    width:100%;max-width:520px;
+    padding:28px;border-radius:26px;
+    background:linear-gradient(155deg,rgba(28,40,65,.98),rgba(11,15,25,.98));
+    border:1px solid var(--line-2);
+    box-shadow:var(--shadow-lg);
+    animation:modalIn .4s cubic-bezier(.16,1,.3,1);
+    margin:auto;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(24px) scale(.95);}to{opacity:1;transform:none;}}
+.modal-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+.modal-h h3{
+    font-family:'Sora',sans-serif;font-size:18px;font-weight:700;
+    letter-spacing:-.3px;display:flex;align-items:center;gap:10px;
+}
+.modal-h h3 i{color:var(--teal-hi);font-size:16px;}
+.x-btn{
+    width:36px;height:36px;border-radius:10px;
+    border:1.5px solid var(--line-1);
+    background:rgba(45,212,191,.04);
+    color:var(--fg-3);cursor:pointer;transition:.25s;font-size:13px;
+}
+.x-btn:hover{color:var(--rose-hi);border-color:var(--rose-line);background:var(--rose-dim);}
+
+.field-g{margin-bottom:16px;}
+.field-g label{
+    display:block;margin-bottom:7px;font-size:10px;font-weight:700;
+    letter-spacing:1.3px;text-transform:uppercase;color:var(--fg-2);
+}
+.f-input,.f-select,.f-textarea{
+    width:100%;padding:13px 15px;border-radius:11px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.7);color:var(--fg-0);
+    font-family:'Fira Code',monospace;
+    font-size:12px;outline:none;transition:.25s;-webkit-appearance:none;
+}
+.f-input:focus,.f-select:focus,.f-textarea:focus{
+    border-color:var(--teal);background:rgba(45,212,191,.06);
+    box-shadow:0 0 0 4px rgba(45,212,191,.1);
+}
+.f-select{
+    cursor:pointer;font-family:'Inter',sans-serif;appearance:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;
+}
+.f-select option{background:#161f30;color:#fff;}
+.f-textarea{resize:vertical;min-height:90px;font-family:'Fira Code',monospace;}
+.f-input::placeholder,.f-textarea::placeholder{color:var(--fg-4);}
+
+.mode-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:4px;}
+.mp{
+    padding:11px 6px;border-radius:11px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.6);
+    color:var(--fg-2);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:3px;
+    transition:.25s;font-family:'Inter',sans-serif;-webkit-appearance:none;
+}
+.mp i{font-size:15px;color:var(--fg-3);transition:.25s;}
+.mp span{font-size:10.5px;font-weight:700;letter-spacing:.3px;}
+.mp small{font-size:8.5px;color:var(--fg-4);letter-spacing:.3px;}
+.mp:hover{border-color:var(--line-3);background:rgba(45,212,191,.06);transform:translateY(-2px);}
+.mp.active{
+    border-color:var(--teal);background:var(--teal-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(45,212,191,.22);
+}
+.mp.active i{color:var(--teal-hi);}
+.mp[data-mode="BR"].active{border-color:var(--gold);background:var(--gold-dim);box-shadow:0 6px 22px rgba(251,191,36,.22);}
+.mp[data-mode="BR"].active i{color:var(--gold-hi);}
+.mp[data-mode="LW"].active{border-color:var(--teal);background:var(--teal-dim);box-shadow:0 6px 22px rgba(45,212,191,.22);}
+.mp[data-mode="LW"].active i{color:var(--teal-hi);}
+
+.spd-pick{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:4px;}
+.sp{
+    padding:9px 4px;border-radius:10px;
+    border:1.5px solid var(--line-1);
+    background:rgba(7,9,15,.6);
+    color:var(--fg-2);cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:2px;
+    transition:.25s;font-family:'Inter',sans-serif;-webkit-appearance:none;
+}
+.sp i{font-size:13px;color:var(--fg-3);}
+.sp span{font-size:10.5px;font-weight:700;font-family:'Fira Code',monospace;}
+.sp small{font-size:8px;color:var(--fg-4);}
+.sp:hover{border-color:var(--line-3);background:rgba(45,212,191,.06);transform:translateY(-2px);}
+.sp.active{
+    border-color:var(--teal);background:var(--teal-dim);color:#fff;
+    box-shadow:0 6px 22px rgba(45,212,191,.22);
+}
+.sp.active i{color:var(--teal-hi);}
+
+.modal-acts{display:flex;justify-content:flex-end;gap:8px;margin-top:22px;}
+
+/* ═══════ TOAST ═══════ */
+.toast-stack{
+    position:fixed;top:16px;right:16px;z-index:10000;
+    display:flex;flex-direction:column;gap:8px;
+    pointer-events:none;max-width:calc(100vw - 32px);
+}
+.toast{
+    display:flex;align-items:center;gap:10px;
+    min-width:220px;max-width:380px;
+    padding:12px 16px;border-radius:12px;
+    background:rgba(22,31,48,.98);
+    backdrop-filter:blur(20px);
+    border:1.5px solid var(--line-2);
+    box-shadow:var(--shadow-lg);
+    color:var(--fg-0);font-size:12px;font-weight:600;
+    animation:toastIn .35s cubic-bezier(.16,1,.3,1);
+    pointer-events:auto;font-family:'Inter',sans-serif;
+}
+.toast i{font-size:15px;flex-shrink:0;}
+.toast.success{border-color:var(--teal-line);}
+.toast.success i{color:var(--teal-hi);}
+.toast.error{border-color:var(--rose-line);}
+.toast.error i{color:var(--rose-hi);}
+.toast.info{border-color:var(--sky-line);}
+.toast.info i{color:var(--sky-hi);}
+@keyframes toastIn{from{opacity:0;transform:translateX(60px);}to{opacity:1;transform:none;}}
+
+.mob-nav{display:none;}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:1250px){
+    .main-grid{grid-template-columns:1fr 380px;}
+    .stats-grid{grid-template-columns:repeat(3,1fr);}
+    .ctrl-grid{grid-template-columns:1fr 1fr;gap:12px;}
+    .ctrl-grid .ctrl:last-child{grid-column:span 2;}
+}
+@media(max-width:1050px){
+    .main-grid{grid-template-columns:1fr;}
+    .console-panel{height:auto;min-height:480px;max-height:70vh;}
+    .stats-grid{grid-template-columns:repeat(3,1fr);}
+}
+
+@media(max-width:768px){
+    .wrap{padding:12px;padding-bottom:100px;}
+    .header-shell{padding:10px 14px;gap:8px;}
+    .brand-tile{width:38px;height:38px;font-size:16px;border-radius:11px;}
+    .brand-name{font-size:14px;}
+    .brand-tag{font-size:8px;gap:5px;}
+    .brand-tag .hide-sm{display:none;}
+    .hdr-nav .hdr-btn{padding:8px 10px;font-size:10px;}
+    .hdr-nav .hdr-btn span{display:none;}
+    .hdr-nav .hdr-btn i{font-size:13px;}
+
+    .hero{padding:20px 22px;border-radius:22px;}
+    .hero-t{font-size:20px;gap:8px;}
+    .hero-d{font-size:12.5px;line-height:1.55;}
+    .hero-pill{font-size:9px;padding:4px 9px;}
+
+    .ctrl-grid{grid-template-columns:1fr;gap:10px;margin-bottom:14px;}
+    .ctrl-grid .ctrl:last-child{grid-column:auto;}
+    .ctrl{padding:14px 16px;border-radius:14px;}
+    .ctrl-h{margin-bottom:11px;}
+    .ctrl-h i{width:28px;height:28px;font-size:11px;}
+    .ctrl-h span{font-size:11px;}
+
+    .mode-wrap{gap:6px;}
+    .mode-btn{padding:10px 4px;}
+    .mode-btn i{font-size:13px;}
+    .mode-btn span{font-size:10px;}
+
+    .risk-btn{padding:12px 6px;}
+    .risk-btn i{font-size:17px;}
+    .risk-btn span{font-size:11px;}
+    .risk-btn small{font-size:8.5px;}
+
+    .spd-val{font-size:24px;}
+    .spd-p{padding:5px 7px;font-size:9.5px;}
+
+    .stats-grid{grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+    .stat{padding:13px 15px;border-radius:14px;}
+    .stat-i{width:33px;height:33px;font-size:13px;margin-bottom:9px;border-radius:9px;}
+    .stat-l{font-size:8px;letter-spacing:1.1px;margin-bottom:4px;}
+    .stat-v{font-size:18px;margin-bottom:4px;}
+    .stat-s{font-size:9px;}
+
+    .main-grid{gap:14px;}
+    .panel{border-radius:18px;}
+    .panel-h{padding:13px 17px;}
+    .panel-i{width:33px;height:33px;font-size:13px;border-radius:9px;}
+    .panel-t{font-size:13.5px;}
+    .panel-badge{font-size:9.5px;padding:3px 7px;}
+
+    .toolbar{padding:12px 14px;flex-direction:column;gap:8px;}
+    .search{min-width:0;width:100%;}
+    .search input{padding:10px 12px 10px 36px;font-size:12px;}
+    .filters{width:100%;overflow-x:auto;}
+    .filters::-webkit-scrollbar{display:none;}
+    .f-btn{flex:1;padding:7px 8px;font-size:10px;}
+
+    .acc-list{padding:10px 12px;max-height:none;min-height:0;}
+
+    .acc{padding:14px;}
+    .acc-av{width:44px;height:44px;font-size:18px;border-radius:12px;}
+    .acc-lvl{font-size:9px;padding:2px 7px;}
+    .acc-nm{font-size:13px;}
+    .acc-nm-txt{max-width:130px;}
+    .acc-meta{font-size:10px;gap:6px;}
+    .status{padding:5px 9px;font-size:8.5px;}
+
+    .acc-metrics{gap:6px;margin-bottom:11px;}
+    .metric{padding:8px;}
+    .metric .m-v{font-size:11px;}
+
+    .prog-box{padding:11px;margin-bottom:11px;}
+
+    .acc-sel{gap:6px;margin-bottom:11px;}
+    .sel-in{padding:8px 10px;font-size:10.5px;padding-right:26px;}
+
+    .acc-acts{gap:4px;}
+    .i-btn{width:32px;height:32px;font-size:11px;border-radius:8px;}
+
+    .console-panel{height:calc(100vh - 160px);max-height:calc(100vh - 160px);min-height:0;}
+    .log-stream{font-size:10px;margin:10px;padding:12px;}
+
+    .mob-nav{
+        position:fixed;bottom:0;left:0;right:0;z-index:4000;
+        display:flex;align-items:center;justify-content:space-around;
+        padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+        background:rgba(7,9,15,.96);
+        backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+        border-top:1px solid var(--line-1);
+    }
+    .mv-btn{
+        flex:1;border:0;background:none;color:var(--fg-3);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:3px;font-size:9px;font-weight:600;letter-spacing:.3px;
+        padding:7px 4px;border-radius:10px;cursor:pointer;transition:.2s;
+        font-family:'Inter',sans-serif;-webkit-appearance:none;
+    }
+    .mv-btn i{font-size:16px;}
+    .mv-btn.active{color:var(--teal-hi);background:var(--teal-dim);}
+    .mv-btn.main-btn{color:var(--teal-hi);}
+    .mv-btn.main-btn i{
+        width:42px;height:42px;border-radius:14px;
+        background:linear-gradient(135deg,#5eead4,#2dd4bf);color:#07090f;
+        display:flex;align-items:center;justify-content:center;
+        box-shadow:0 8px 20px rgba(45,212,191,.4);margin-top:-12px;font-size:16px;
+    }
+
+    .mob-tab{display:none;}
+    .mob-tab.active{display:block;}
+    .console-panel.mob-tab.active{display:flex;}
+
+    .modal-mask{align-items:flex-end;padding:0;}
+    .modal{
+        border-radius:24px 24px 0 0;
+        padding:22px 18px calc(24px + env(safe-area-inset-bottom,0px));
+        max-height:92vh;overflow-y:auto;
+    }
+    .modal-h h3{font-size:16px;}
+
+    .toast-stack{top:10px;right:10px;left:10px;max-width:none;}
+    .toast{max-width:none;min-width:0;font-size:11.5px;padding:11px 14px;}
+
+    .mode-pick{gap:5px;}
+    .mp{padding:10px 4px;}
+    .mp i{font-size:14px;}
+    .mp span{font-size:9.5px;}
+    .mp small{font-size:8px;}
+
+    .spd-pick{gap:4px;}
+    .sp{padding:8px 2px;}
+    .sp i{font-size:12px;}
+    .sp span{font-size:9.5px;}
+    .sp small{font-size:7.5px;}
+}
+
+@media(max-width:420px){
+    .wrap{padding:10px;padding-bottom:96px;}
+    .login-shell{padding:34px 22px 28px;border-radius:26px;}
+    .login-title{font-size:25px;}
+    .login-mark{width:74px;height:74px;}
+    .login-mark-tile{font-size:32px;border-radius:22px;}
+    .hero-t{font-size:18px;}
+    .stats-grid{grid-template-columns:1fr;}
+    .stat{display:flex;align-items:center;gap:12px;padding:13px;}
+    .stat-i{margin:0;flex-shrink:0;}
+    .acc-metrics{grid-template-columns:1fr 1fr;}
+    .acc-metrics .metric:nth-child(3){grid-column:span 2;}
+    .acc-foot{flex-direction:column;align-items:stretch;gap:8px;}
+    .acc-acts{justify-content:flex-end;}
+    .spd-pick{grid-template-columns:repeat(3,1fr);}
+}
+
+@media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{
+        animation-duration:.01ms !important;
+        animation-iteration-count:1 !important;
+        transition-duration:.01ms !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bg-stage">
+    <div class="bg-orbe o1"></div>
+    <div class="bg-orbe o2"></div>
+    <div class="bg-orbe o3"></div>
+</div>
+<div class="bg-noise"></div>
+
+<!-- ═══════ LOGIN ═══════ -->
+<section id="login-screen">
+    <div class="login-shell">
+        <div class="login-mark">
+            <div class="login-mark-glow"></div>
+            <div class="login-mark-tile"><i class="fa-solid fa-shield-halved"></i></div>
+        </div>
+        <div class="login-title">ShadowGMRFF</div>
+        <div class="login-sub">Free Fire • Level Up Engine</div>
+        <div class="login-chip">
+            <span><span class="pulse-dot"></span>Encrypted Access</span>
+        </div>
+
+        <form onsubmit="doLogin(event)">
+            <div class="field">
+                <i class="fa-solid fa-user f-icon"></i>
+                <input id="login-user" type="text" placeholder="USERNAME" autocomplete="username" autocapitalize="off" autocorrect="off" spellcheck="false">
+            </div>
+            <div class="field">
+                <i class="fa-solid fa-lock f-icon"></i>
+                <input id="login-pass" type="password" placeholder="PASSWORD" autocomplete="current-password">
+                <button type="button" class="eye" onclick="toggleKey()"><i id="eye-icon" class="fa-solid fa-eye"></i></button>
+            </div>
+            <div id="login-error" class="login-error"></div>
+            <button id="login-btn" class="login-cta" type="submit">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Enter Command Center
+            </button>
+        </form>
+
+        <div class="login-meta">
+            <b>ShadowGMRFF</b> • Premium Engine<br>
+            FF Level Up System • v8.0
+        </div>
+    </div>
+</section>
+
+<!-- ═══════ MAIN ═══════ -->
+<div id="app">
+<div class="toast-stack" id="toast-stack"></div>
+
+<header class="app-header">
+    <div class="header-shell">
+        <div class="brand">
+            <div class="brand-tile"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="brand-txt">
+                <div class="brand-name">ShadowGMRFF</div>
+                <div class="brand-tag">
+                    <span class="live-dot">LIVE</span>
+                    <span class="hide-sm">•</span>
+                    <span class="hide-sm">Command Center</span>
+                </div>
+            </div>
+        </div>
+        <nav class="hdr-nav">
+            <button class="hdr-btn" onclick="refreshLiveAll()" title="Live Sync">
+                <i class="fa-solid fa-satellite-dish"></i><span>Live</span>
+            </button>
+            <button class="hdr-btn" onclick="manualRefresh()" title="Refresh">
+                <i class="fa-solid fa-rotate"></i><span>Refresh</span>
+            </button>
+            <button class="hdr-btn" onclick="openAddModal()" title="Add">
+                <i class="fa-solid fa-plus"></i><span>Add</span>
+            </button>
+            <button class="hdr-btn danger" onclick="doLogout()" title="Logout">
+                <i class="fa-solid fa-right-from-bracket"></i>
+            </button>
+        </nav>
+    </div>
+</header>
+
+<div class="wrap">
+
+    <section class="hero">
+        <div class="hero-in">
+            <div class="hero-t">
+                Command <em>Center</em>
+                <span class="hero-pill"><i class="fa-solid fa-circle-check"></i> System Nominal</span>
+            </div>
+            <p class="hero-d">
+                Full-spectrum control over your Free Fire level-up engine — match modes, risk profiles, and adaptive speed tuning, all in real time.
+            </p>
+        </div>
+    </section>
+
+    <!-- CONTROL PANEL -->
+    <section class="ctrl-grid">
+        <div class="ctrl">
+            <div class="ctrl-h">
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Match Mode</span>
+            </div>
+            <div class="mode-wrap">
+                <button class="mode-btn" data-mode="BR" onclick="setMatchMode('BR')">
+                    <i class="fa-solid fa-crosshairs"></i>
+                    <span>BR</span>
+                </button>
+                <button class="mode-btn" data-mode="LW" onclick="setMatchMode('LW')">
+                    <i class="fa-solid fa-paw"></i>
+                    <span>LW</span>
+                </button>
+                <button class="mode-btn" data-mode="AUTO" onclick="setMatchMode('AUTO')">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Auto</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="ctrl">
+            <div class="ctrl-h">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Risk Profile</span>
+            </div>
+            <div class="risk-wrap">
+                <button class="risk-btn" data-mode="SAFE" onclick="setRiskMode('SAFE')">
+                    <i class="fa-solid fa-shield-heart"></i>
+                    <span>SAFE</span>
+                    <small>Humanized</small>
+                </button>
+                <button class="risk-btn" data-mode="RISK" onclick="setRiskMode('RISK')">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>RISK</span>
+                    <small>Aggressive</small>
+                </button>
+            </div>
+        </div>
+
+        <div class="ctrl">
+            <div class="ctrl-h">
+                <i class="fa-solid fa-gauge-high"></i>
+                <span>Global Speed</span>
+            </div>
+            <div class="spd-control">
+                <input type="range" id="global-speed" class="spd-slider" min="0.25" max="5" step="0.25" value="1.0" oninput="onSpeedSlide(this.value)" onchange="setGlobalSpeed(this.value)">
+                <div class="spd-row">
+                    <div class="spd-val" id="spd-display">1.00x</div>
+                    <div class="spd-preset">
+                        <button class="spd-p" onclick="setSpeedPreset(0.5)">0.5</button>
+                        <button class="spd-p" onclick="setSpeedPreset(1.0)">1x</button>
+                        <button class="spd-p" onclick="setSpeedPreset(2.0)">2x</button>
+                        <button class="spd-p" onclick="setSpeedPreset(3.0)">3x</button>
+                        <button class="spd-p" onclick="setSpeedPreset(5.0)">5x</button>
+                    </div>
+                </div>
+                <div class="spd-hint">
+                    <i class="fa-solid fa-info-circle"></i>
+                    <span id="speed-hint-text">Normal speed — balanced risk</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- STATS -->
+    <section class="stats-grid">
+        <div class="stat" data-color="teal">
+            <div class="stat-i"><i class="fa-solid fa-users"></i></div>
+            <span class="stat-l">Accounts</span>
+            <div class="stat-v" id="stat-accounts">0</div>
+            <div class="stat-s" id="stat-online">0 Online</div>
+        </div>
+        <div class="stat" data-color="gold">
+            <div class="stat-i"><i class="fa-solid fa-rocket"></i></div>
+            <span class="stat-l">Started</span>
+            <div class="stat-v" id="stat-started">0</div>
+            <div class="stat-s" id="stat-per-hour">~0 / hr</div>
+        </div>
+        <div class="stat" data-color="teal">
+            <div class="stat-i"><i class="fa-solid fa-check-double"></i></div>
+            <span class="stat-l">Completed</span>
+            <div class="stat-v" id="stat-completed">0</div>
+            <div class="stat-s" id="stat-active-matches">0 Active</div>
+        </div>
+        <div class="stat" data-color="rose">
+            <div class="stat-i"><i class="fa-solid fa-chart-line"></i></div>
+            <span class="stat-l">Total EXP</span>
+            <div class="stat-v" id="stat-exp">+0</div>
+            <div class="stat-s" id="stat-exp-rate">~0 / hr</div>
+        </div>
+        <div class="stat" data-color="sky">
+            <div class="stat-i"><i class="fa-solid fa-clock"></i></div>
+            <span class="stat-l">Uptime</span>
+            <div class="stat-v" id="stat-uptime">00:00:00</div>
+            <div class="stat-s" id="stat-risk-indicator">SAFE Mode</div>
+        </div>
+    </section>
+
+    <!-- MAIN GRID -->
+    <section class="main-grid">
+        <div class="panel mob-tab active" id="tab-accounts">
+            <div class="panel-h">
+                <div class="panel-hl">
+                    <div class="panel-i"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="panel-t">
+                        Accounts
+                        <span class="panel-badge" id="badge-count">0</span>
+                    </div>
+                </div>
+                <button class="btn" id="btn-pause-all" onclick="togglePauseAll()">
+                    <i class="fa-solid fa-pause"></i><span>Pause All</span>
+                </button>
+            </div>
+            <div class="toolbar">
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass s-i"></i>
+                    <input id="account-search" type="text" placeholder="Search by name or UID..." oninput="filterAccounts()" autocapitalize="off" autocorrect="off">
+                </div>
+                <div class="filters">
+                    <button class="f-btn active" onclick="setFilter('all',this)">All</button>
+                    <button class="f-btn" onclick="setFilter('in_match',this)">Match</button>
+                    <button class="f-btn" onclick="setFilter('online',this)">Online</button>
+                    <button class="f-btn" onclick="setFilter('paused',this)">Paused</button>
+                </div>
+            </div>
+            <div class="acc-list" id="accounts-container">
+                <div class="empty">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <p>Syncing accounts...</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel console-panel mob-tab" id="tab-console">
+            <div class="panel-h">
+                <div class="panel-hl">
+                    <div class="panel-i"><i class="fa-solid fa-terminal"></i></div>
+                    <div class="panel-t">Live Console</div>
+                </div>
+                <button class="btn" onclick="clearLogs()"><i class="fa-solid fa-trash"></i></button>
+            </div>
+            <div class="console-toolbar">
+                <div class="cf-group">
+                    <button class="cf active" onclick="setLogFilter('all',this)">All</button>
+                    <button class="cf" onclick="setLogFilter('match',this)">Match</button>
+                    <button class="cf" onclick="setLogFilter('success',this)">EXP</button>
+                    <button class="cf" onclick="setLogFilter('error',this)">Errors</button>
+                </div>
+                <button class="cf active" id="btn-autoscroll" onclick="toggleAutoScroll()">
+                    <i class="fa-solid fa-arrows-down-to-line"></i>
+                </button>
+            </div>
+            <div class="log-stream" id="console-stream" onscroll="handleLogScroll()"></div>
+            <div class="console-foot">
+                <span class="live-tag">
+                    <span style="width:5px;height:5px;border-radius:50%;background:var(--teal);box-shadow:0 0 10px var(--teal);animation:pulseDot 1.5s infinite;display:inline-block;"></span>
+                    Live Stream
+                </span>
+                <span>ShadowGMRFF</span>
+            </div>
+        </div>
+
+        <div class="panel mob-tab" id="tab-analytics">
+            <div class="panel-h">
+                <div class="panel-hl">
+                    <div class="panel-i"><i class="fa-solid fa-chart-pie"></i></div>
+                    <div class="panel-t">Analytics</div>
+                </div>
+            </div>
+            <div style="padding:14px;">
+                <div class="stat" data-color="gold" style="margin-bottom:10px;">
+                    <div class="stat-i"><i class="fa-solid fa-rocket"></i></div>
+                    <span class="stat-l">Matches Started</span>
+                    <div class="stat-v" id="m-started">0</div>
+                    <div class="stat-s" id="m-rate">~0 / hour</div>
+                </div>
+                <div class="stat" data-color="rose" style="margin-bottom:10px;">
+                    <div class="stat-i"><i class="fa-solid fa-chart-line"></i></div>
+                    <span class="stat-l">Total EXP Gained</span>
+                    <div class="stat-v" id="m-exp">+0</div>
+                    <div class="stat-s" id="m-exp-rate">~0 EXP/hr</div>
+                </div>
+                <div class="stat" data-color="teal">
+                    <div class="stat-i"><i class="fa-solid fa-shield-halved"></i></div>
+                    <span class="stat-l">System Status</span>
+                    <div class="stat-v" style="font-size:16px;color:var(--teal-hi);">Operational</div>
+                    <div class="stat-s" id="m-mode-indicator">Mode: AUTO | SAFE | 1.00x</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<nav class="mob-nav">
+    <button class="mv-btn active" onclick="switchTab('accounts',this)">
+        <i class="fa-solid fa-users"></i>Accounts
+    </button>
+    <button class="mv-btn" onclick="switchTab('analytics',this)">
+        <i class="fa-solid fa-chart-pie"></i>Stats
+    </button>
+    <button class="mv-btn main-btn" onclick="openAddModal()">
+        <i class="fa-solid fa-plus"></i>
+    </button>
+    <button class="mv-btn" onclick="switchTab('console',this)">
+        <i class="fa-solid fa-terminal"></i>Console
+    </button>
+</nav>
+
+<!-- ADD MODAL -->
+<div class="modal-mask" id="add-modal">
+    <div class="modal">
+        <div class="modal-h">
+            <h3><i class="fa-solid fa-user-plus"></i> Add Account</h3>
+            <button class="x-btn" onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <form onsubmit="submitAddAccount(event)">
+            <div class="field-g">
+                <label>Login Type</label>
+                <select class="f-select" id="acc-type" onchange="toggleFormType()">
+                    <option value="guest">Guest (UID + Password)</option>
+                    <option value="token">Access Token</option>
+                </select>
+            </div>
+
+            <div class="field-g">
+                <label>Match Mode</label>
+                <div class="mode-pick">
+                    <button type="button" class="mp" data-mode="AUTO" onclick="pickAccMode('AUTO')">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Auto</span>
+                        <small>Smart</small>
+                    </button>
+                    <button type="button" class="mp" data-mode="BR" onclick="pickAccMode('BR')">
+                        <i class="fa-solid fa-crosshairs"></i>
+                        <span>BR</span>
+                        <small>Royale</small>
+                    </button>
+                    <button type="button" class="mp" data-mode="LW" onclick="pickAccMode('LW')">
+                        <i class="fa-solid fa-paw"></i>
+                        <span>LW</span>
+                        <small>Wolf</small>
+                    </button>
+                </div>
+                <input type="hidden" id="acc-mode" value="AUTO">
+            </div>
+
+            <div class="field-g">
+                <label>Speed</label>
+                <div class="spd-pick">
+                    <button type="button" class="sp" data-speed="0.5" onclick="pickSpeed(0.5)">
+                        <i class="fa-solid fa-turtle"></i>
+                        <span>0.5x</span>
+                        <small>Slow</small>
+                    </button>
+                    <button type="button" class="sp active" data-speed="1.0" onclick="pickSpeed(1.0)">
+                        <i class="fa-solid fa-person-walking"></i>
+                        <span>1.0x</span>
+                        <small>Normal</small>
+                    </button>
+                    <button type="button" class="sp" data-speed="2.0" onclick="pickSpeed(2.0)">
+                        <i class="fa-solid fa-person-running"></i>
+                        <span>2.0x</span>
+                        <small>Fast</small>
+                    </button>
+                    <button type="button" class="sp" data-speed="3.0" onclick="pickSpeed(3.0)">
+                        <i class="fa-solid fa-bolt"></i>
+                        <span>3.0x</span>
+                        <small>Ultra</small>
+                    </button>
+                    <button type="button" class="sp" data-speed="5.0" onclick="pickSpeed(5.0)">
+                        <i class="fa-solid fa-fire"></i>
+                        <span>5.0x</span>
+                        <small>Risk</small>
+                    </button>
+                </div>
+                <input type="hidden" id="acc-speed" value="1.0">
+            </div>
+
+            <div id="guest-inputs">
+                <div class="field-g">
+                    <label>Guest UID</label>
+                    <input id="acc-uid" class="f-input" type="text" placeholder="Enter UID" autocomplete="off" inputmode="numeric">
+                </div>
+                <div class="field-g">
+                    <label>Password / Key</label>
+                    <input id="acc-password" class="f-input" type="text" placeholder="Enter password" autocomplete="off">
+                </div>
+            </div>
+            <div id="token-inputs" style="display:none">
+                <div class="field-g">
+                    <label>Access Token</label>
+                    <textarea id="acc-token" class="f-textarea" placeholder="Paste access token here..." autocomplete="off"></textarea>
+                </div>
+            </div>
+            <div class="modal-acts">
+                <button type="button" class="btn" onclick="closeAddModal()">Cancel</button>
+                <button type="submit" class="btn btn-main"><i class="fa-solid fa-rocket"></i> Save &amp; Start</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
+
+<script>
+/* ═══════ CONFIG ═══════ */
+const EXP_TABLE = {
+1:0,2:48,3:202,4:544,5:1012,6:1844,7:2792,8:3800,9:4870,10:6004,
+11:7192,12:8448,13:9760,14:11140,15:12566,16:14060,17:15610,18:17224,19:18902,20:20632,
+21:22424,22:24278,23:26192,24:28166,25:30200,26:32294,27:34448,28:37804,29:41274,30:44870,
+31:48582,32:53394,33:58566,34:64096,35:69994,36:76460,37:83506,38:91128,39:99322,40:108092,
+41:120144,42:133266,43:147472,44:162760,45:179126,46:196572,47:215368,48:235516,49:257010,50:279860,
+51:304056,52:348318,53:394982,54:444044,55:495508,56:549364,57:633756,58:721744,59:813336,60:908522,
+61:1041438,62:1180352,63:1325266,64:1476184,65:1634300,66:1840946,67:2056594,68:2281242,69:2514880,70:2757530,
+71:3059506,72:3372284,73:3699456,74:4041030,75:4397002,76:4829104,77:5282204,78:5756304,79:6251408,80:6776502,
+81:7381324,82:8043154,83:8752982,84:9510808,85:10316338,86:11277190,87:12291748,88:13360304,89:14482858,90:15659418,
+91:17026708,92:18453950,93:19941280,94:21488570,95:23095858,96:24763138,97:26490428,98:28378704,99:30124996,100:32032884
+};
+
+let cachedAccounts = [];
+let cachedLogs = [];
+let activeFilter = "all";
+let activeLogFilter = "all";
+let autoScroll = true;
+let clientStart = Date.now();
+let statsInterval = null;
+let currentMode = "AUTO";
+let currentRisk = "SAFE";
+let currentSpeed = 1.0;
+let selectedAccMode = "AUTO";
+let selectedAccSpeed = 1.0;
+
+/* ═══════ LOGIN ═══════ */
+async function doLogin(e){
+    if(e) e.preventDefault();
+    const user = document.getElementById("login-user").value.trim();
+    const pass = document.getElementById("login-pass").value.trim();
+    const err = document.getElementById("login-error");
+    const btn = document.getElementById("login-btn");
+    if(!user || !pass){ err.innerText = "Username & password required"; return; }
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>&nbsp; Authenticating...';
+    err.innerText = "";
+    try {
+        const r = await fetch("/api/login", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({username: user, password: pass})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            const sc = document.getElementById("login-screen");
+            sc.style.transition = "opacity .4s";
+            sc.style.opacity = "0";
+            setTimeout(()=>{
+                sc.style.display = "none";
+                document.getElementById("app").style.display = "block";
+                bootDashboard();
+                toast("Welcome to ShadowGMRFF!", "success");
+            }, 400);
+        } else {
+            err.innerText = d.error || "Invalid credentials";
+            document.getElementById("login-pass").value = "";
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Enter Command Center';
+        }
+    } catch(err2){
+        err.innerText = "Network error. Try again.";
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Enter Command Center';
+    }
+}
+
+async function doLogout(){
+    if(!confirm("Logout from Command Center?")) return;
+    try { await fetch("/api/logout", {method: "POST", credentials: "same-origin"}); } catch(e){}
+    location.reload();
+}
+function toggleKey(){
+    const inp = document.getElementById("login-pass");
+    const eye = document.getElementById("eye-icon");
+    if(inp.type === "password"){ inp.type = "text"; eye.className = "fa-solid fa-eye-slash"; }
+    else { inp.type = "password"; eye.className = "fa-solid fa-eye"; }
+}
+
+/* ═══════ TOAST ═══════ */
+function toast(msg, type="info"){
+    const wrap = document.getElementById("toast-stack");
+    if(!wrap) return;
+    const t = document.createElement("div");
+    t.className = "toast " + type;
+    const icons = {success: "fa-circle-check", error: "fa-triangle-exclamation", info: "fa-circle-info"};
+    t.innerHTML = `<i class="fa-solid ${icons[type] || icons.info}"></i><span>${esc(msg)}</span>`;
+    wrap.appendChild(t);
+    setTimeout(()=>{
+        t.style.opacity = "0";
+        t.style.transform = "translateX(40px)";
+        t.style.transition = ".3s";
+        setTimeout(()=>t.remove(), 300);
+    }, 3400);
+}
+
+/* ═══════ MODE ═══════ */
+async function loadMatchMode(){
+    try {
+        const r = await fetch("/api/match-mode", {credentials: "same-origin"});
+        if(!r.ok) return;
+        const d = await r.json();
+        if(d.status === "ok"){
+            currentMode = d.mode;
+            updateModeUI(d.mode);
+        }
+    } catch(e){}
+}
+function updateModeUI(mode){
+    document.querySelectorAll(".mode-btn").forEach(c=>{
+        c.classList.toggle("active", c.dataset.mode === mode);
+    });
+}
+async function setMatchMode(mode){
+    try {
+        const r = await fetch("/api/match-mode", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({mode: mode})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            currentMode = d.mode;
+            updateModeUI(d.mode);
+            toast(`Match Mode → ${d.mode}`, "success");
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+
+/* ═══════ RISK MODE ═══════ */
+async function loadRiskMode(){
+    try {
+        const r = await fetch("/api/risk-mode", {credentials: "same-origin"});
+        if(!r.ok) return;
+        const d = await r.json();
+        if(d.status === "ok"){
+            currentRisk = d.mode;
+            updateRiskUI(d.mode);
+        }
+    } catch(e){}
+}
+function updateRiskUI(mode){
+    document.querySelectorAll(".risk-btn").forEach(c=>{
+        c.classList.toggle("active", c.dataset.mode === mode);
+    });
+    const ind = document.getElementById("stat-risk-indicator");
+    if(ind){
+        if(mode === "SAFE"){ ind.innerText = "SAFE Mode"; ind.style.color = "var(--teal-hi)"; }
+        else { ind.innerText = "RISK Mode"; ind.style.color = "var(--rose-hi)"; }
+    }
+}
+async function setRiskMode(mode){
+    if(mode === "RISK"){
+        if(!confirm("⚠️ RISK MODE\n\nFast & aggressive. Higher ban risk!\n\nContinue?")) return;
+    }
+    try {
+        const r = await fetch("/api/risk-mode", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({mode: mode})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            currentRisk = d.mode;
+            updateRiskUI(d.mode);
+            toast(`Risk → ${d.mode}`, mode === "RISK" ? "error" : "success");
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+
+/* ═══════ SPEED ═══════ */
+async function loadSpeed(){
+    try {
+        const r = await fetch("/api/speed", {credentials: "same-origin"});
+        if(!r.ok) return;
+        const d = await r.json();
+        if(d.status === "ok"){
+            currentSpeed = d.global;
+            document.getElementById("global-speed").value = d.global;
+            updateSpeedUI(d.global);
+        }
+    } catch(e){}
+}
+function onSpeedSlide(v){
+    document.getElementById("spd-display").innerText = parseFloat(v).toFixed(2) + "x";
+    updateSpeedHint(parseFloat(v));
+}
+function updateSpeedUI(v){
+    document.getElementById("spd-display").innerText = parseFloat(v).toFixed(2) + "x";
+    document.getElementById("global-speed").value = v;
+    updateSpeedHint(parseFloat(v));
+    document.querySelectorAll(".spd-p").forEach(b=>{
+        const val = parseFloat(b.innerText);
+        b.classList.toggle("active", Math.abs(val - parseFloat(v)) < 0.01);
+    });
+}
+function updateSpeedHint(v){
+    const el = document.getElementById("speed-hint-text");
+    if(!el) return;
+    if(v < 0.5){ el.innerText = "🐢 Very slow — safest"; el.style.color = "var(--teal-hi)"; }
+    else if(v < 1.0){ el.innerText = "🐌 Slow — low risk"; el.style.color = "var(--teal-hi)"; }
+    else if(v < 1.6){ el.innerText = "🚶 Normal — balanced risk"; el.style.color = "var(--fg-1)"; }
+    else if(v < 2.5){ el.innerText = "🏃 Fast — medium risk"; el.style.color = "var(--gold-hi)"; }
+    else if(v < 4.0){ el.innerText = "⚡ Very fast — high risk"; el.style.color = "var(--gold-hi)"; }
+    else { el.innerText = "🔥 MAX speed — extreme risk"; el.style.color = "var(--rose-hi)"; }
+}
+async function setGlobalSpeed(v){
+    try {
+        const r = await fetch("/api/speed/global", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({speed: parseFloat(v)})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            currentSpeed = d.speed;
+            updateSpeedUI(d.speed);
+            toast(`Speed → ${d.speed}x`, "success");
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+function setSpeedPreset(v){
+    updateSpeedUI(v);
+    setGlobalSpeed(v);
+}
+
+/* ═══════ ACCOUNT MODAL ═══════ */
+function pickAccMode(mode){
+    selectedAccMode = mode;
+    document.getElementById("acc-mode").value = mode;
+    document.querySelectorAll(".mp").forEach(b=>{
+        b.classList.toggle("active", b.dataset.mode === mode);
+    });
+}
+function pickSpeed(v){
+    selectedAccSpeed = parseFloat(v);
+    document.getElementById("acc-speed").value = v;
+    document.querySelectorAll(".sp").forEach(b=>{
+        b.classList.toggle("active", Math.abs(parseFloat(b.dataset.speed) - selectedAccSpeed) < 0.01);
+    });
+}
+
+function openAddModal(){
+    document.getElementById("add-modal").classList.add("active");
+    pickAccMode("AUTO");
+    pickSpeed(1.0);
+}
+function closeAddModal(){ document.getElementById("add-modal").classList.remove("active"); }
+function toggleFormType(){
+    const t = document.getElementById("acc-type").value;
+    document.getElementById("guest-inputs").style.display = t === "guest" ? "block" : "none";
+    document.getElementById("token-inputs").style.display = t === "token" ? "block" : "none";
+}
+
+async function submitAddAccount(e){
+    e.preventDefault();
+    const type = document.getElementById("acc-type").value;
+    const modeVal = document.getElementById("acc-mode").value || "AUTO";
+    const speedVal = parseFloat(document.getElementById("acc-speed").value || "1.0");
+    let payload = {};
+    if(type === "guest"){
+        const uid = document.getElementById("acc-uid").value.trim();
+        const pass = document.getElementById("acc-password").value.trim();
+        if(!uid || !pass){ toast("UID and password required", "error"); return; }
+        payload = {uid, password: pass, mode: modeVal, speed: speedVal};
+    } else {
+        const token = document.getElementById("acc-token").value.trim();
+        if(!token){ toast("Access token required", "error"); return; }
+        payload = {token, mode: modeVal, speed: speedVal};
+    }
+    try {
+        const r = await fetch("/api/account/add", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify(payload)
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            closeAddModal();
+            toast(`Account added (Mode: ${modeVal}, Speed: ${speedVal}x)`, "success");
+            document.getElementById("acc-uid").value = "";
+            document.getElementById("acc-password").value = "";
+            document.getElementById("acc-token").value = "";
+            fetchStats();
+        } else {
+            toast(d.error || "Failed to add", "error");
+        }
+    } catch(err){ toast("Network error", "error"); }
+}
+
+/* ═══════ ACCOUNT ACTIONS ═══════ */
+async function deleteAccount(uid, authUid=""){
+    if(!confirm(`Remove account ${uid}?`)) return;
+    try {
+        const r = await fetch("/api/account/delete", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid, auth_uid: authUid})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast("Account removed", "success");
+            const c = document.getElementById("acc-" + uid);
+            if(c) c.remove();
+            fetchStats();
+        } else {
+            toast(d.error || "Delete failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+async function refreshAcc(uid){
+    try {
+        toast(`Refreshing ${uid}...`, "info");
+        await fetch("/api/account/refresh", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid})
+        });
+        setTimeout(fetchStats, 800);
+    } catch(e){ toast("Refresh failed", "error"); }
+}
+async function refreshLiveOne(uid){
+    try {
+        toast(`Fetching live info...`, "info");
+        const r = await fetch("/api/live/one", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast(`Live: ${d.info.name} | Lvl ${d.info.level}`, "success");
+            fetchStats();
+        } else {
+            toast(d.error || "Live fetch failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+async function refreshLiveAll(){
+    try {
+        toast("Refreshing all accounts...", "info");
+        const r = await fetch("/api/live/refresh", {method: "POST", credentials: "same-origin"});
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast(`Updated ${d.updated}/${d.total}`, "success");
+            fetchStats();
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+async function restartAcc(uid){
+    try {
+        toast(`Restarting ${uid}...`, "info");
+        await fetch("/api/account/restart", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid})
+        });
+        setTimeout(fetchStats, 800);
+    } catch(e){ toast("Restart failed", "error"); }
+}
+async function togglePause(uid){
+    try {
+        const r = await fetch("/api/account/pause", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast(d.is_paused ? `Paused ${uid}` : `Resumed ${uid}`, d.is_paused ? "info" : "success");
+            fetchStats();
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+async function togglePauseAll(){
+    try {
+        const r = await fetch("/api/account/pause_all", {method: "POST", credentials: "same-origin"});
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast(d.all_paused ? "All paused" : "All resumed", d.all_paused ? "info" : "success");
+            fetchStats();
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+
+async function changeAccMode(uid, newMode){
+    try {
+        const r = await fetch("/api/account/mode", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid, mode: newMode})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast(`Mode → ${newMode}`, "success");
+            fetchStats();
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+
+async function changeAccSpeed(uid, newSpeed){
+    try {
+        const r = await fetch("/api/speed/account", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            credentials: "same-origin",
+            body: JSON.stringify({uid, speed: parseFloat(newSpeed)})
+        });
+        const d = await r.json();
+        if(d.status === "ok"){
+            toast(`Speed → ${newSpeed}x`, "success");
+            fetchStats();
+        } else {
+            toast(d.error || "Failed", "error");
+        }
+    } catch(e){ toast("Network error", "error"); }
+}
+
+/* ═══════ FILTERS ═══════ */
+function setFilter(f, btn){
+    activeFilter = f;
+    document.querySelectorAll(".f-btn").forEach(x=>x.classList.remove("active"));
+    if(btn) btn.classList.add("active");
+    filterAccounts();
+}
+function filterAccounts(){
+    const q = (document.getElementById("account-search").value || "").toLowerCase().trim();
+    document.querySelectorAll(".acc").forEach(card=>{
+        const uid = (card.dataset.uid || "").toLowerCase();
+        const nick = (card.dataset.nick || "").toLowerCase();
+        const st = (card.dataset.status || "").toLowerCase();
+        const paused = card.dataset.paused === "1";
+        const matchSearch = !q || uid.includes(q) || nick.includes(q);
+        let matchFilter = true;
+        if(activeFilter === "in_match") matchFilter = st.includes("match") && !paused;
+        else if(activeFilter === "online") matchFilter = (st.includes("online") || st.includes("searching")) && !paused;
+        else if(activeFilter === "paused") matchFilter = paused || st.includes("paused");
+        card.style.display = matchSearch && matchFilter ? "block" : "none";
+    });
+}
+
+/* ═══════ RENDER ACCOUNTS ═══════ */
+function renderAccounts(accounts){
+    const container = document.getElementById("accounts-container");
+    document.getElementById("badge-count").innerText = accounts.length;
+
+    const allPaused = accounts.length > 0 && accounts.every(a=>a.is_paused || a.status === "PAUSED");
+    const pb = document.getElementById("btn-pause-all");
+    if(pb){
+        pb.innerHTML = allPaused
+            ? '<i class="fa-solid fa-play"></i><span>Resume All</span>'
+            : '<i class="fa-solid fa-pause"></i><span>Pause All</span>';
+    }
+
+    if(accounts.length === 0){
+        container.innerHTML = `
+            <div class="empty">
+                <i class="fa-solid fa-ghost"></i>
+                <p>No accounts yet</p>
+                <button class="btn btn-main" onclick="openAddModal()">
+                    <i class="fa-solid fa-plus"></i> Add First Account
+                </button>
+            </div>`;
+        return;
+    }
+
+    if(container.querySelector(".empty")) container.innerHTML = "";
+
+    const uids = new Set(accounts.map(a=>String(a.uid)));
+    container.querySelectorAll(".acc").forEach(c=>{
+        if(!uids.has(c.dataset.uid)) c.remove();
+    });
+
+    accounts.forEach(acc=>{
+        const uid = String(acc.uid);
+        const level = Math.max(1, parseInt(acc.level) || 1);
+        const nextLvl = Math.min(100, level + 1);
+        const baseExp = EXP_TABLE[level] ?? 0;
+        const targetExp = EXP_TABLE[nextLvl] ?? baseExp + 50000;
+        const needed = Math.max(1, targetExp - baseExp);
+        const curExp = Number(acc.current_exp || 0);
+        const earned = Math.max(0, curExp - baseExp);
+        const remaining = Math.max(0, targetExp - curExp);
+        const pct = level >= 100 ? 100 : Math.min(100, Math.max(0, earned / needed * 100));
+
+        const mode = (acc.mode || (level < 3 ? "BR" : "LONE_WOLF")).toUpperCase();
+        const modeLabel = mode === "BR" ? "BR" : "LW";
+        const modeTagClass = mode === "BR" ? "tag-br" : "tag-lw";
+        const cardMode = mode === "BR" ? "BR" : "LW";
+
+        const accOverride = (acc.acc_mode || "").toUpperCase();
+        let overrideTag = "";
+        if(accOverride && ["BR", "LW", "AUTO"].includes(accOverride)){
+            const oCls = accOverride === "BR" ? "tag-br" : (accOverride === "LW" ? "tag-lw" : "tag-auto");
+            overrideTag = `<span class="tag ${oCls}" title="Per-account mode">⚙ ${accOverride}</span>`;
+        }
+
+        const accSpeed = Number(acc.speed || 1.0).toFixed(2);
+        const speedTag = accSpeed !== "1.00" ? `<span class="tag tag-spd">⚡ ${accSpeed}x</span>` : "";
+
+        const paused = Boolean(acc.is_paused || acc.status === "PAUSED");
+        const status = paused ? "PAUSED" : (acc.status || "ONLINE");
+
+        let cls = "s-online";
+        if(paused) cls = "s-paused";
+        else if(status.includes("IN_MATCH")) cls = "s-match";
+        else if(status.includes("SEARCHING")) cls = "s-search";
+        else if(status !== "ONLINE" && !status.startsWith("ONLINE")) cls = "s-error";
+
+        let card = document.getElementById("acc-" + uid);
+        if(!card){
+            card = document.createElement("div");
+            card.id = "acc-" + uid;
+            card.className = "acc";
+            container.appendChild(card);
+        }
+        card.className = "acc";
+        card.dataset.mode = cardMode;
+        card.dataset.uid = uid;
+        card.dataset.nick = acc.nickname || "";
+        card.dataset.status = cls.replace("s-", "");
+        card.dataset.paused = paused ? "1" : "0";
+
+        const liveName = acc.live_name || acc.nickname || "Unknown";
+        const liveLevel = acc.live_level || level;
+
+        const modeSelectVal = accOverride && ["BR","LW","AUTO"].includes(accOverride) ? accOverride : "AUTO";
+        const speedSelectVal = Number(acc.speed || 1.0).toFixed(2);
+
+        card.innerHTML = `
+            <div class="acc-top">
+                <div class="acc-id">
+                    <div class="acc-av-wrap">
+                        <div class="acc-av"><i class="fa-solid fa-gamepad"></i></div>
+                        <span class="acc-lvl">L${liveLevel}</span>
+                    </div>
+                    <div class="acc-info">
+                        <div class="acc-nm">
+                            <span class="acc-nm-txt">${esc(liveName)}</span>
+                            <span class="tag tag-region">${esc(acc.region || "BD")}</span>
+                            <span class="tag ${modeTagClass}">${modeLabel}</span>
+                            ${overrideTag}
+                            ${speedTag}
+                        </div>
+                        <div class="acc-meta">
+                            <span>UID: ${esc(uid)}</span>
+                            <button class="copy-btn" style="background:none;border:0;color:var(--fg-4);cursor:pointer;padding:2px;" onclick="copyUid('${escAttr(uid)}')">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                            <span class="uptime" data-uid="${escAttr(uid)}" data-uptime="${Math.floor(acc.uptime_seconds || 0)}" data-paused="${paused ? 1 : 0}">
+                                <i class="fa-solid fa-stopwatch"></i>${fmtDur(acc.uptime_seconds || 0)}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="status ${cls}">
+                    <span class="s-dot"></span>${esc(status)}
+                </div>
+            </div>
+
+            <div class="acc-metrics">
+                <div class="metric">
+                    <span class="m-l">Initial</span>
+                    <span class="m-v">${Number(acc.initial_exp || 0).toLocaleString()}</span>
+                </div>
+                <div class="metric">
+                    <span class="m-l">Current</span>
+                    <span class="m-v">${curExp.toLocaleString()}</span>
+                </div>
+                <div class="metric gain">
+                    <span class="m-l">Gained</span>
+                    <span class="m-v">+${Number(acc.gained_exp || 0).toLocaleString()}</span>
+                </div>
+            </div>
+
+            <div class="prog-box">
+                <div class="prog-h">
+                    <span>Lvl ${level} → <b>L${nextLvl}</b></span>
+                    <b>${remaining.toLocaleString()} LEFT</b>
+                </div>
+                <div class="prog-bar">
+                    <div class="prog-in" style="width:${pct.toFixed(1)}%"></div>
+                </div>
+                <div class="prog-f">
+                    <span>${earned.toLocaleString()} / ${needed.toLocaleString()}</span>
+                    <span class="pct">${pct.toFixed(1)}%</span>
+                </div>
+            </div>
+
+            <div class="acc-sel">
+                <div class="sel-g">
+                    <label>Mode</label>
+                    <select class="sel-in" onchange="changeAccMode('${escAttr(uid)}', this.value)">
+                        <option value="AUTO" ${modeSelectVal === "AUTO" ? "selected" : ""}>AUTO</option>
+                        <option value="BR" ${modeSelectVal === "BR" ? "selected" : ""}>BR</option>
+                        <option value="LW" ${modeSelectVal === "LW" ? "selected" : ""}>LW</option>
+                    </select>
+                </div>
+                <div class="sel-g">
+                    <label>Speed</label>
+                    <select class="sel-in" onchange="changeAccSpeed('${escAttr(uid)}', this.value)">
+                        <option value="0.50" ${speedSelectVal === "0.50" ? "selected" : ""}>0.50x</option>
+                        <option value="0.75" ${speedSelectVal === "0.75" ? "selected" : ""}>0.75x</option>
+                        <option value="1.00" ${speedSelectVal === "1.00" ? "selected" : ""}>1.00x</option>
+                        <option value="1.50" ${speedSelectVal === "1.50" ? "selected" : ""}>1.50x</option>
+                        <option value="2.00" ${speedSelectVal === "2.00" ? "selected" : ""}>2.00x</option>
+                        <option value="3.00" ${speedSelectVal === "3.00" ? "selected" : ""}>3.00x</option>
+                        <option value="5.00" ${speedSelectVal === "5.00" ? "selected" : ""}>5.00x</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="acc-foot">
+                <span class="acc-last">
+                    <i class="fa-regular fa-clock"></i>
+                    ${esc(acc.last_match_time || "Running...")}
+                </span>
+                <div class="acc-acts">
+                    <button class="i-btn live" onclick="refreshLiveOne('${escAttr(uid)}')" title="Live Info">
+                        <i class="fa-solid fa-satellite-dish"></i>
+                    </button>
+                    <button class="i-btn" onclick="togglePause('${escAttr(uid)}')" title="${paused ? "Resume" : "Pause"}">
+                        <i class="fa-solid ${paused ? "fa-play" : "fa-pause"}"></i>
+                    </button>
+                    <button class="i-btn" onclick="restartAcc('${escAttr(uid)}')" title="Restart">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                    <button class="i-btn" onclick="refreshAcc('${escAttr(uid)}')" title="Refresh">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </button>
+                    <button class="i-btn danger" onclick="deleteAccount('${escAttr(uid)}', '${escAttr(acc.auth_uid || "")}')" title="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>
+            </div>`;
+    });
+
+    filterAccounts();
+}
+
+/* ═══════ LOGS ═══════ */
+function setLogFilter(f, btn){
+    activeLogFilter = f;
+    document.querySelectorAll(".cf").forEach(x=>{
+        if(x.id !== "btn-autoscroll") x.classList.remove("active");
+    });
+    if(btn) btn.classList.add("active");
+    renderLogs(cachedLogs);
+}
+function renderLogs(logs){
+    const stream = document.getElementById("console-stream");
+    let list = logs || [];
+    if(activeLogFilter === "match"){
+        list = list.filter(l => String(l.message || "").toLowerCase().includes("match"));
+    } else if(activeLogFilter === "success"){
+        list = list.filter(l => l.level === "success" || String(l.message || "").includes("EXP"));
+    } else if(activeLogFilter === "error"){
+        list = list.filter(l => l.level === "error" || l.level === "warning");
+    }
+    stream.innerHTML = list.map(l=>`
+        <div class="log-line">
+            <span class="log-t">[${esc(l.time || "00:00:00")}]</span>
+            <span class="log-m ${l.level || "info"}">${esc(l.message || "")}</span>
+        </div>
+    `).join("");
+    if(autoScroll) stream.scrollTop = stream.scrollHeight;
+}
+async function clearLogs(){
+    try {
+        await fetch("/api/logs/clear", {method: "POST", credentials: "same-origin"});
+        cachedLogs = [];
+        renderLogs([]);
+        toast("Console cleared", "info");
+    } catch(e){ toast("Clear failed", "error"); }
+}
+function toggleAutoScroll(){
+    autoScroll = !autoScroll;
+    document.getElementById("btn-autoscroll").classList.toggle("active", autoScroll);
+    if(autoScroll){
+        const s = document.getElementById("console-stream");
+        s.scrollTop = s.scrollHeight;
+    }
+}
+function handleLogScroll(){
+    const s = document.getElementById("console-stream");
+    if(s.scrollHeight - s.scrollTop - s.clientHeight > 80) autoScroll = false;
+}
+
+/* ═══════ FETCH STATS ═══════ */
+async function fetchStats(){
+    try {
+        const r = await fetch("/api/stats", {credentials: "same-origin"});
+        if(r.status === 401){ location.reload(); return; }
+        if(!r.ok) throw new Error("HTTP " + r.status);
+        const d = await r.json();
+
+        const accs = Array.isArray(d.accounts) ? d.accounts : [];
+        const logs = Array.isArray(d.logs) ? d.logs : [];
+
+        const modeMap = d.account_modes || {};
+        const speedMap = d.account_speeds || {};
+        accs.forEach(a => {
+            const m = modeMap[String(a.uid)];
+            if(m) a.acc_mode = m;
+            const s = speedMap[String(a.uid)];
+            if(s !== undefined) a.speed = s;
+        });
+
+        setText("stat-accounts", d.total_accounts ?? accs.length);
+        setText("stat-started", d.total_matches_started || 0);
+        setText("stat-completed", d.total_matches || 0);
+        setText("stat-exp", "+" + Number(d.total_gained_exp || 0).toLocaleString());
+        setText("stat-active-matches", (d.total_active_matches || 0) + " Active");
+
+        const online = accs.filter(a => {
+            const s = String(a.status || "").toUpperCase();
+            return (s.includes("ONLINE") || s.includes("IN_MATCH")) && !a.is_paused;
+        }).length;
+        setText("stat-online", online + " Online");
+
+        const uptimeH = Math.max(0.016, (d.uptime || 60) / 3600);
+        const perH = Math.round((d.total_matches_started || 0) / uptimeH);
+        setText("stat-per-hour", "~" + perH + " / hr");
+        setText("stat-exp-rate", "~" + Number(d.exp_per_hour || 0).toLocaleString() + " / hr");
+
+        setText("m-started", d.total_matches_started || 0);
+        setText("m-rate", "~" + perH + " / hour");
+        setText("m-exp", "+" + Number(d.total_gained_exp || 0).toLocaleString());
+        setText("m-exp-rate", "~" + Number(d.exp_per_hour || 0).toLocaleString() + " EXP/hr");
+
+        if(d.match_mode && d.match_mode !== currentMode){
+            currentMode = d.match_mode;
+            updateModeUI(d.match_mode);
+        }
+        if(d.risk_mode && d.risk_mode !== currentRisk){
+            currentRisk = d.risk_mode;
+            updateRiskUI(d.risk_mode);
+        }
+        if(d.global_speed !== undefined && Math.abs(d.global_speed - currentSpeed) > 0.01){
+            currentSpeed = d.global_speed;
+            updateSpeedUI(d.global_speed);
+        }
+
+        const mInd = document.getElementById("m-mode-indicator");
+        if(mInd) mInd.innerText = `Mode: ${currentMode} | ${currentRisk} | ${Number(currentSpeed).toFixed(2)}x`;
+
+        cachedAccounts = accs;
+        cachedLogs = logs;
+        renderAccounts(accs);
+        renderLogs(logs);
+    } catch(e){
+        console.warn("Stats fetch error:", e);
+    }
+}
+
+/* ═══════ HELPERS ═══════ */
+function copyUid(uid){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(uid).then(()=> toast("UID copied", "success"));
+    } else {
+        toast("UID: " + uid, "info");
+    }
+}
+function switchTab(name, btn){
+    document.querySelectorAll(".mv-btn").forEach(x=>x.classList.remove("active"));
+    if(btn) btn.classList.add("active");
+    document.querySelectorAll(".mob-tab").forEach(x=>x.classList.remove("active"));
+    const el = document.getElementById("tab-" + name);
+    if(el) el.classList.add("active");
+}
+function setText(id, v){
+    const el = document.getElementById(id);
+    if(el) el.innerText = v ?? "";
+}
+function esc(s){
+    if(s === null || s === undefined) return "";
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+}
+function escAttr(s){ return esc(s); }
+function fmtDur(sec){
+    sec = Math.max(0, Math.floor(Number(sec) || 0));
+    const h = Math.floor(sec / 3600);
+    const m = Math.floor((sec % 3600) / 60);
+    const s = sec % 60;
+    if(h > 0) return `${h}h ${String(m).padStart(2, "0")}m`;
+    return `${String(m).padStart(2, "0")}m ${String(s).padStart(2, "0")}s`;
+}
+function manualRefresh(){
+    fetchStats();
+    loadMatchMode();
+    loadRiskMode();
+    loadSpeed();
+    toast("Refreshed", "info");
+}
+
+/* ═══════ BOOT ═══════ */
+function bootDashboard(){
+    fetchStats();
+    loadMatchMode();
+    loadRiskMode();
+    loadSpeed();
+    if(statsInterval) clearInterval(statsInterval);
+    statsInterval = setInterval(fetchStats, 3000);
+    setInterval(()=>{ loadMatchMode(); loadRiskMode(); loadSpeed(); }, 15000);
+}
+
+(async function checkAuth(){
+    try {
+        const r = await fetch("/api/check-auth", {credentials: "same-origin"});
+        const d = await r.json();
+        if(d.authenticated){
+            document.getElementById("login-screen").style.display = "none";
+            document.getElementById("app").style.display = "block";
+            bootDashboard();
+        }
+    } catch(e){}
+})();
+
+setInterval(()=>{
+    const el = Math.floor((Date.now() - clientStart) / 1000);
+    const h = String(Math.floor(el / 3600)).padStart(2, "0");
+    const m = String(Math.floor((el % 3600) / 60)).padStart(2, "0");
+    const s = String(el % 60).padStart(2, "0");
+    setText("stat-uptime", `${h}:${m}:${s}`);
+    document.querySelectorAll(".uptime").forEach(u=>{
+        if(u.dataset.paused === "1") return;
+        let v = parseInt(u.dataset.uptime || "0") + 1;
+        u.dataset.uptime = v;
+        u.innerHTML = `<i class="fa-solid fa-stopwatch"></i>${fmtDur(v)}`;
+    });
+}, 1000);
+
+document.getElementById("login-pass").addEventListener("keydown", e=>{ if(e.key === "Enter") doLogin(e); });
+document.getElementById("login-user").addEventListener("keydown", e=>{ if(e.key === "Enter") document.getElementById("login-pass").focus(); });
+document.addEventListener("keydown", e=>{ if(e.key === "Escape") closeAddModal(); });
+</script>
+</body>
+</html>
