@@ -5,8 +5,3 @@ protobuf-decoder
 protobuf
 requests
 aiohttp
-flask
-pywebpush
-cryptography
-py-vapid
-PySocks

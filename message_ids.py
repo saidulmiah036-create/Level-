@@ -1883,7 +1883,3 @@ MESSAGE_ID_TO_NAME = {
     3585: "RUDP_S2C_REMOVE_TELEPORT_DOORS",
     3586: "RUDP_S2C_SubgameLobbyLW_BattleFenceState",
 }
-
-def get_message_name(cmd):
-
-    return MESSAGE_ID_TO_NAME.get(cmd, f"UNKNOWN_{cmd}")
