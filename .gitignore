@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+users.json
+users.json.tmp
+accounts.json
+
+# Per-user game account stores (contain credentials)
+accounts_*.json
+accounts*.json.tmp
+token_cache.json
+devices.json
+version_config_cache.json
+playstore_version_cache.json
+.rocks_storage_migrated_v1
+data/
+*.tmp
