@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+*.bak
+.git/
+.gitignore
+.DS_Store
+users.json
+users.json.tmp
+
+# Keep per-user account credentials out of the image. Root accounts.json is an optional
+# admin seed file and is copied into the attached /data volume when it is first initialized.
+accounts_*.json
+token_cache.json
+devices.json
+version_config_cache.json
+playstore_version_cache.json
+.rocks_storage_migrated_v1
+data/
+*.tmp
